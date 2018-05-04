@@ -5,7 +5,7 @@ mp3genre:
 	$(CC) -c $@.c -o $@.o
 
 debug:
-	$(CC) -DDEBUG -c $@.c -o $@.o
+	$(CC) -DDEBUG -c mp3genre.c -o mp3genre.o
 
 standalone:
 	$(CC) -DSTANDALONE -o mp3genre mp3genre.c
