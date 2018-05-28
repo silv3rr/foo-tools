@@ -8,7 +8,7 @@
 
 - [README.1st](README.1st) Original README file
 - [CHANGES](src/CHANGES) CHANGELOG
-- [src/README.1st] (src/README.1st] Building instructions
+- [src/README.1st](src/README.1st) Building instructions
 - [doc](doc) Documentation on installing/running the programs
 - [src/pre/README.mp3genre](README.mp3genre) mp3genre specific README (install/configure)
 
@@ -20,6 +20,7 @@
 - [ ] replace pre/mp3genre by pzs-ng code or other id3 lib instead
 - [X] change bytes to mb/gb: "Totals of this pre for announce: 3F 28734928B"
 - [ ] FLAC support?
+- [ ] [#5](https://github.com/glftpd/foo-tools/issues/5) add option to force using mv external 
 
 ### spy
 - [X] look into libhttpd.h since it's LGPL now (http://www.hughes.com.au/products/libhttpd)
