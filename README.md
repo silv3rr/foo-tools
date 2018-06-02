@@ -17,7 +17,6 @@
 ### foo-pre
 - [ ] replace pre/mp3genre by pzs-ng code or other id3 lib instead
 - [ ] FLAC support?
-- [ ] add audiosort after pre
 
 ### spy
 - [X] look into libhttpd.h since it's LGPL now (http://www.hughes.com.au/products/libhttpd)
