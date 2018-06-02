@@ -15,12 +15,10 @@
 ## TODO:
 
 ### foo-pre
-- [X] switch from mp3genre to master branch
-- [X] add option in pre.cfg disable genre completely(?)
 - [ ] replace pre/mp3genre by pzs-ng code or other id3 lib instead
-- [X] change bytes to mb/gb: "Totals of this pre for announce: 3F 28734928B"
 - [ ] FLAC support?
-- [ ] [#5](https://github.com/glftpd/foo-tools/issues/5) add option to force using mv external 
+- [X] [#5](https://github.com/glftpd/foo-tools/issues/5) add option to force using mv external 
+- [X] add audiosort after pre
 
 ### spy
 - [X] look into libhttpd.h since it's LGPL now (http://www.hughes.com.au/products/libhttpd)
