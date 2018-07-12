@@ -6,9 +6,7 @@ SRCDIR = ../..
 
 LIBS = $(SRCDIR)/lib/macro.o $(SRCDIR)/lib/gllogs.o $(SRCDIR)/lib/pwdfile.o $(SRCDIR)/util/linefilereader.o $(SRCDIR)/collection/hashtable.o $(SRCDIR)/lib/stringtokenizer.o
 
-#all: mod_idmp3.so mod_sitenfoadd.so mod_nfohandler.so mod_chmod.so mod_symlink.so mod_audiosort.so
-all: mod_audiosort.so
-all2: mod_symlink.so
+all: mod_idmp3.so mod_sitenfoadd.so mod_nfohandler.so mod_chmod.so mod_symlink.so mod_audiosort.so
 
 mod_idmp3.so: mod_idmp3.o
 	(cd mp3info; make)
