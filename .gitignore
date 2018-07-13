@@ -38,4 +38,9 @@ config.h
 config.status
 config.cache
 config.log
+autom4te.cache/
+*.swp
 
+*.log
+src/pre/modules/tester-new-wip.c
+src/who/webspy-new-wip.c
