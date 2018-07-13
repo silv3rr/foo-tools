@@ -1,9 +1,3 @@
-# Excludes
-!testing/mover/Makefile
-!testing/new/Makefile
-!unsorted-older/kicker/Makefile
-!unsorted-older/lastraces/Makefile
-
 # Object files
 *.o
 *.ko
@@ -50,3 +44,10 @@ autom4te.cache/
 *.bak
 *.log
 *.new
+
+# Includes
+!testing/mover/Makefile
+!testing/new/Makefile
+!unsorted-older/kicker/Makefile
+!unsorted-older/lastraces/Makefile
+
