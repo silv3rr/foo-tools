@@ -1,3 +1,9 @@
+# Excludes
+!testing/mover/Makefile
+!testing/new/Makefile
+!unsorted-older/kicker/Makefile
+!unsorted-older/lastraces/Makefile
+
 # Object files
 *.o
 *.ko
@@ -41,6 +47,6 @@ config.log
 autom4te.cache/
 *.swp
 
+*.bak
 *.log
-src/pre/modules/tester-new-wip.c
-src/who/webspy-new-wip.c
+*.new
