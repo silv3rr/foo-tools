@@ -41,4 +41,7 @@ config.log
 autom4te.cache/
 *.swp
 
-webspy-access.log
+src/pre/*.log
+src/pre/modules/tester-new-wip.c
+src/who/webspy-new-wip.c
+src/who/webspy-access.log
