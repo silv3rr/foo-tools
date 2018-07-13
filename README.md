@@ -26,19 +26,19 @@ mp3genre for foo-pre; adds mp3 genre in PRE output without module
 
 check README on how to install/configure
 
-- [src/pre/README.mp3genre](README.mp3genre)
+- [src/pre/README.mp3genre](src/pre/README.mp3genre)
 
 ### Modules:
 
 Addons for foo-pre; modules add functions but are not build into foo-pre binary
 
-- [src/pre/README.modules](README.modules)
-- [src/pre/modules/README.mod_audiosort](README.mod_audiosort)
-- [src/pre/modules/README.mod_chmod](README.mod_chmod)
-- [src/pre/modules/README.mod_idmp3](README.mod_idmp3)
-- [src/pre/modules/README.mod_nfohandler](README.mod_nfohandler)
-- [src/pre/modules/README.mod_sitenfoadd](README.mod_sitenfoadd)
-- [src/pre/modules/README.mod_symlink](README.mod_symlink)
+- [src/pre/README.modules](src/pre/README.modules)
+- [src/pre/modules/README.mod_audiosort](src/pre/modules/README.mod_audiosort)
+- [src/pre/modules/README.mod_chmod](src/pre/modules/README.mod_chmod)
+- [src/pre/modules/README.mod_idmp3](src/pre/modules/README.mod_idmp3)
+- [src/pre/modules/README.mod_nfohandler](src/pre/modules/README.mod_nfohandler)
+- [src/pre/modules/README.mod_sitenfoadd](src/pre/modules/README.mod_sitenfoadd)
+- [src/pre/modules/README.mod_symlink](src/pre/modules/README.mod_symlink)
 
 ## TODO:
 
