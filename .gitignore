@@ -41,8 +41,6 @@ config.log
 autom4te.cache/
 *.swp
 
-src/pre/*.log
+*.log
 src/pre/modules/tester-new-wip.c
-src/pre/mp3genre/*.log
 src/who/webspy-new-wip.c
-src/who/webspy-access.log
