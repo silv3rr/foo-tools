@@ -17,12 +17,22 @@ For more details see [CHANGELOG](src/CHANGES)
 - [README.1st](README.1st) Original README file
 - [CHANGES](src/CHANGES) CHANGELOG
 - [src/README.1st](src/README.1st) Building instructions
-- [doc/HOWTO](HOWTO) Notes about compiling
+- [doc/HOWTO](doc/HOWTO) Notes about compiling
 - [doc](doc) Documentation on installing/running the programs
-- [src/pre/README.mp3genre](README.mp3genre) mp3genre specific README (install/configure)
+
+### mp3genre:
+
+mp3genre for foo-pre; adds mp3 genre in PRE output without module
+
+check README on how to install/configure
+
+- [src/pre/README.mp3genre](README.mp3genre)
 
 ### Modules:
 
+Addons for foo-pre; modules add functions but are not build into foo-pre binary
+
+- [src/pre/README.modules](README.modules)
 - [src/pre/modules/README.mod_audiosort](README.mod_audiosort)
 - [src/pre/modules/README.mod_chmod](README.mod_chmod)
 - [src/pre/modules/README.mod_idmp3](README.mod_idmp3)
