@@ -43,6 +43,7 @@
 
 #include "foo-pre.h"
 #include "gl_userfile.h"
+#include "mp3genre/mp3genre.h"
 
 #define VERSION "$Id: foo-pre.c,v 1.18 2004/09/28 06:52:24 sorend Exp $"
 #define USAGE " * Syntax: SITE PRE <RELEASEDIR> [SECTION]\n"
@@ -52,6 +53,9 @@ extern int errno;
 
 hashtable_t *_config = 0;
 hashtable_t *_envctx = 0;
+
+int touch_dir(char* dir);
+int touch_file(char* fname);
 
 /*
  * Acecssor method for configuration.
@@ -965,7 +969,7 @@ int pre_do_module(char *module, filelist_t *files, char *path, char *argv[], str
 	return 1;
 }
 
-int pre_do_modules(filelist_t *files, char *path, char *argv[], struct subdir_list *subdirs) {
+void pre_do_modules(filelist_t *files, char *path, char *argv[], struct subdir_list *subdirs) {
 	hashtable_t *cfg, *env;
 	stringtokenizer st;
 	char *tmp;
