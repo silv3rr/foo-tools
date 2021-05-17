@@ -41,5 +41,5 @@ Addons for foo-pre; modules add functions but are not build into foo-pre binary
 
 ## TODO
 
-Moved to [TODO](TODO.md)
+Moved to [TODO.md](TODO.md)
 
