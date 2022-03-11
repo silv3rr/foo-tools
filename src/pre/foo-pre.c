@@ -43,7 +43,6 @@
 
 #include "foo-pre.h"
 #include "gl_userfile.h"
-#include "mp3genre/mp3genre.h"
 
 #define VERSION "$Id: foo-pre.c,v 1.18 2004/09/28 06:52:24 sorend Exp $"
 #define USAGE " * Syntax: SITE PRE <RELEASEDIR> [SECTION]\n"
