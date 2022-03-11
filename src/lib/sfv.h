@@ -37,7 +37,7 @@
 /*
  * Structure holding info about a sfv-file.
  */
-struct sfv_list {
+extern struct sfv_list {
 	char *filename;
     unsigned long crc;
 

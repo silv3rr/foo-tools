@@ -43,10 +43,10 @@ struct con_allow {
 typedef struct con_allow con_allow_t;
 
 struct cycleip {
-    struct sockaddr_in sockname;
-    long is_available;
+	struct sockaddr_in sockname;
+	long is_available;
 
-    struct cycleip *next;
+	struct cycleip *next;
 };
 
 typedef struct cycleip cycleip_t;
@@ -63,7 +63,7 @@ struct context {
 	cycleip_t *ips;
 
 	int running;
-    pthread_mutex_t mutex;
+	pthread_mutex_t mutex;
 
 	struct sockaddr_in bind_to;
 };
@@ -75,14 +75,14 @@ struct bouncer_arg {
 	int client_fd;
 	int server_fd;
 
-    struct sockaddr_in client_name;
-    struct sockaddr_in server_name;
+	struct sockaddr_in client_name;
+	struct sockaddr_in server_name;
 
-    int accesses;
+	int accesses;
 
 	context_t *context;
 
-    unsigned long bytes_in, bytes_out;
+	unsigned long bytes_in, bytes_out;
 	pthread_t thread;
 };
 
