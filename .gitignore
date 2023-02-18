@@ -17,6 +17,7 @@
 *.out
 *.app
 
+libhttpd-1.4/
 simple_entry
 entry
 datanode
@@ -34,6 +35,7 @@ webspy
 zipcheck
 tester
 mp3genre
+httpd.h
 
 Makefile
 config.h
@@ -53,8 +55,8 @@ autom4te.cache/
 *_old
 
 # Includes
+!src/pre/modules/mp3info
 !testing/mover/Makefile
 !testing/new/Makefile
 !unsorted-older/kicker/Makefile
 !unsorted-older/lastraces/Makefile
-
