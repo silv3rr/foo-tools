@@ -102,8 +102,11 @@ Jan 25 2020: * fixed audiosort mod: pre dirs are enclosed in single quote now
 
 Apr 16 2021: * fixed overflow adding stats with multiple stat_section lines w/ seperate creds:
                  'malloc(): invalid (next) size (unsorted)' (or 'stack smashing detected')
-    (thanks to MickMouse, SoniCFL and f* for pointing this out).
+               (thanks to MickMouse, SoniCFL and f* for pointing this out).
 
 Mar 03 2022: + added mod_prebw
              + updated genres in mp3genre.h from pzs-ng's multimedia.c
              * fixed makefiles/compiler warnings for foobnc and sfv
+
+Jun 28 2023: * changed date macros for 'dir' property to %MM %DD etc
+             * changed prebw module to run bin without any output
