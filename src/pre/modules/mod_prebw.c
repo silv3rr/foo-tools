@@ -230,9 +230,9 @@ int mod_prebw_rel_func(char *dir, char *argv[]) {
 	strftime(buf, 1024, "%W", tm_now);
 	pre_replace(s_path, "WOY", buf);
 
-	sprintf(buf, "%s '%s/%s' &", prebw_bin, s_path, tmp);
+	sprintf(buf, "/bin/nohup /bin/bash -c \"%s '%s/%s'\" >/dev/null 2>/dev/null &", prebw_bin, s_path, tmp);
+
 #ifdef DEBUG
-	if (debug) { 
 		printf("MODULE-DEBUG: %s\n", buf);
 		f = fopen("mod_prebw.log", "a");
 		char fdate[12], ftime[10];
