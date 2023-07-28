@@ -211,22 +211,26 @@ int mod_prebw_rel_func(char *dir, char *argv[]) {
 	tm_now = localtime(&now);
 
 	strftime(buf, 1024, "%d", tm_now);
-	pre_replace(s_path, "DD", buf);
+	pre_replace(tmp, "%DD", buf);
 
 	strftime(buf, 1024, "%m", tm_now);
-	pre_replace(s_path, "MM", buf);
+	pre_replace(tmp, "%MM", buf);
 
 	strftime(buf, 1024, "%Y", tm_now);
-	pre_replace(s_path, "YYYY", buf);
+	pre_replace(tmp, "%YYYY", buf);
 
 	strftime(buf, 1024, "%y", tm_now);
-	pre_replace(s_path, "YY", buf);
+	pre_replace(tmp, "%YY", buf);
 
 	strftime(buf, 1024, "%w", tm_now);
-	pre_replace(s_path, "WW", buf);
+	pre_replace(tmp, "%WW", buf);
 
 	strftime(buf, 1024, "%W", tm_now);
-	pre_replace(s_path, "WOY", buf);
+	pre_replace(tmp, "%WOY", buf);
+
+	strftime(buf, 1024, "%V", tm_now);
+	pre_replace(tmp, "%CW", buf);
+	pre_replace(tmp, "%KW", buf);
 
 	sprintf(buf, "/bin/nohup /bin/bash -c \"%s '%s/%s'\" >/dev/null 2>/dev/null &", prebw_bin, s_path, tmp);
 
