@@ -6,19 +6,14 @@ SRCDIR = ..
 LIBS = ../collection/strlist.o ../lib/gllogs.o ../lib/pwdfile.o ../util/linefilereader.o ../collection/hashtable.o ../lib/stringtokenizer.o ./gl_userfile.o
 OBJS = ./mp3genre/mp3genre.o
 
-foo-pre: foo-pre.o $(LIBS)
+foo-pre.debug: CC += -DDEBUG
+
+foo-pre foo-pre.debug: foo-pre.o $(LIBS)
 	$(MAKE) -C mp3genre
 	$(CC) -o $@ $< $(LIBS) $(OBJS) -ldl
 
 foo.Pre: foo.Pre.o
 	$(CC) -o $@ $< $(LIBS)
-
-foo-pre.debug: foo-pre.o $(LIBS)
-	$(MAKE) -C mp3genre
-	$(CC) -DDEBUG -o $@ $< $(LIBS) $(OBJS) -ldl
-
-foo.Pre.debug: foo.Pre.o
-	$(CC) -DDEBUG -o $@ $< $(LIBS)
 
 all: foo-pre
 

@@ -128,9 +128,6 @@ int mod_audiosort_rel_func(char *dir, char *argv[]) {
 	strlist_iterator_t *i;
 	FILE *f;
 	int found = 0;
-#ifdef DEBUG
-	int debug = 1;
-#endif
 	section = ht_get(get_env(),"section");
 	if (!section)
 		return 1;
@@ -141,7 +138,7 @@ int mod_audiosort_rel_func(char *dir, char *argv[]) {
 		if (strcmp(tmp, section) == 0) {
 			found++;
 #ifdef DEBUG
-			if (debug) printf("MODULE-DEBUG: strcmp tmp=\"%s\" section=\"%s\" found=%i\n", tmp, section, found);
+			printf("MODULE-DEBUG: strcmp tmp=\"%s\" section=\"%s\" found=%i\n", tmp, section, found);
 #endif
 			break;
 		}
@@ -150,19 +147,19 @@ int mod_audiosort_rel_func(char *dir, char *argv[]) {
 	free(i);
 	if (!found) {
 #ifdef DEBUG
-		if (debug) printf("MODULE-DEBUG: no a_sections found=%i\n", found);
+		printf("MODULE-DEBUG: no a_sections found=%i\n", found);
 #endif
 		return 1;
 	}
 
 #ifdef DEBUG
-	if (debug) printf("MODULE-DEBUG: dir=%s section=%s\n", dir, section);
+	printf("MODULE-DEBUG: dir=%s section=%s\n", dir, section);
 #endif
 
 	// get the dir of the section.
 	sprintf(buf, "section.%s.%s", section, PROPERTY_SECTION_DIR);
 #ifdef DEBUG
-	if (debug) printf("MODULE-DEBUG: buf=%s\n", buf);
+	printf("MODULE-DEBUG: buf=%s\n", buf);
 #endif
 
 	s_path = ht_get(get_config(), buf);
@@ -170,13 +167,13 @@ int mod_audiosort_rel_func(char *dir, char *argv[]) {
 	// return if missing configuration.
 	if (!s_path) {
 #ifdef DEBUG
-		if (debug) printf("MODULE-DEBUG: missing cfg, s_path=%s\n", s_path);
+		printf("MODULE-DEBUG: missing cfg, s_path=%s\n", s_path);
 #endif
 		return 1;
 	}
 
 #ifdef DEBUG
-	if (debug) printf("MODULE-DEBUG: s_path=%s\n", s_path);
+	printf("MODULE-DEBUG: s_path=%s\n", s_path);
 #endif
 
 	// get the rlsname
@@ -185,7 +182,7 @@ int mod_audiosort_rel_func(char *dir, char *argv[]) {
 		return 1;
 	tmp++;
 #ifdef DEBUG
-	if (debug) printf("MODULE-DEBUG: tmp=%s\n", tmp);
+	printf("MODULE-DEBUG: tmp=%s\n", tmp);
 #endif
 
 	audiosort_bin = ht_get(get_config(), PROPERTY_MOD_AUDIOSORT_BIN);
@@ -193,17 +190,15 @@ int mod_audiosort_rel_func(char *dir, char *argv[]) {
 		audiosort_bin = "/bin/audiosort";
 
 #ifdef DEBUG
-	if (debug) printf("MODULE-DEBUG: audiosort_bin=%s\n", audiosort_bin);
+	printf("MODULE-DEBUG: audiosort_bin=%s\n", audiosort_bin);
 #endif
 	f = fopen(audiosort_bin, "r");
 	if (!f)
 		return 1;
 
 #ifdef DEBUG
-	if (debug) { 
-		printf("MODULE-DEBUG: dir=%s section=%s s_path=%s\n", dir, section, s_path);
-		printf("MODULE-DEBUG: argv0=%s argv1=%s argv2=%s\n", argv[0], argv[1], argv[2]);
-	}
+	printf("MODULE-DEBUG: dir=%s section=%s s_path=%s\n", dir, section, s_path);
+	printf("MODULE-DEBUG: argv0=%s argv1=%s argv2=%s\n", argv[0], argv[1], argv[2]);
 #endif
 
 	time_t now;
@@ -232,15 +227,13 @@ int mod_audiosort_rel_func(char *dir, char *argv[]) {
 
 	sprintf(buf, "%s '%s/%s' >/dev/null 2>&1", audiosort_bin, s_path, tmp);
 #ifdef DEBUG
-	if (debug) { 
-		printf("MODULE-DEBUG: %s\n", buf);
-		f = fopen("mod_audiosort.log", "a");
-		char fdate[12], ftime[10];
-		strftime(fdate, 1024, "%Y-%m-%d", tm_now);
-		strftime(ftime, 1024, "%H:%M:%S", tm_now);
-		fprintf(f, "%s %s MODULE-DEBUG: %s\n", fdate, ftime, buf);
-		fclose(f);
-	}
+	printf("MODULE-DEBUG: %s\n", buf);
+	f = fopen("mod_audiosort.log", "a");
+	char fdate[12], ftime[10];
+	strftime(fdate, 1024, "%Y-%m-%d", tm_now);
+	strftime(ftime, 1024, "%H:%M:%S", tm_now);
+	fprintf(f, "%s %s MODULE-DEBUG: %s\n", fdate, ftime, buf);
+	fclose(f);
 #endif
 	if (system(buf) == -1)
 		printf("audiosorting %s failed!\n", dir);

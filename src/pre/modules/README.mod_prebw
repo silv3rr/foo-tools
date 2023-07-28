@@ -41,6 +41,7 @@ Like 'glFTPd PreBW' by biohazard (untested).
 Since the prebw script now runs chrooted, make sure it can find glftpd's logs etc.
 
 For slv-prebw:
+  change shebang to #!/bin/bash
   just set GLROOT="" and make sure any required binaries (sort, uniq, tac) are in gldir/bin
 For bio's prebw:
   edit LOG paths in config.hpp (remove /glftpd) and recompile
