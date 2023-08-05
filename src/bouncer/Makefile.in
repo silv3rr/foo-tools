@@ -32,6 +32,6 @@ foobnc: $(FOOBNCOBJS)
 	$(CC) -o $@ $(FOOBNCOBJS) -L/usr/local/lib -lpthread -lhttpd $(DEFS)
 
 clean:
-	@rm -f *.o *~ simple_entry entry datanode *.pid
+	@rm -f *.o *~ simple_entry entry datanode *.pid foobnc
 
 
