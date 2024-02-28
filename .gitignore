@@ -17,6 +17,7 @@
 *.out
 *.app
 
+.vscode/
 libhttpd-1.4/
 simple_entry
 entry
