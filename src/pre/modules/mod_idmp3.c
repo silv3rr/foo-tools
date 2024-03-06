@@ -169,7 +169,7 @@ int mod_idmp3_file_func(char *filepath, char *argv[]) {
 	FILE *fh;
 
 	if (mod_idmp3_count > 0) {
-		// printf("already got the mp3, break\n");
+		// printf(" .. already got .mp3, break\n");
 		return 0;
 	}
 	
@@ -181,7 +181,7 @@ int mod_idmp3_file_func(char *filepath, char *argv[]) {
 		tmp = filepath;
 
 	if (strcasecmp(tmp, "mp3")) {
-		// printf(" .. %s -> not mp3, continue\n", tmp);
+		// printf(" .. %s -> not .mp3, continue\n", tmp);
 		return 1;
 	}
 
