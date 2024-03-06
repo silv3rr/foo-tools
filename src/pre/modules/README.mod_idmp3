@@ -1,4 +1,4 @@
-
+MP3INFO
 
 Building:
 ---------
@@ -40,7 +40,7 @@ output from mod_idmp3 can be configured using the setting:
 
 mod_idmp3.output=output string
 
-in the pre.cfg, default output string is:
+in pre.cfg, default output string is:
 
 PRE-MP3INFO: "%R" "%a" "%l" "%y" "%g" "%G" "%r" "%Q" "%o" "%m" "%s" "%S" "%L"
 
@@ -62,3 +62,20 @@ if you know that program, you should be familiar with this too.
 %L - mpeg layer
 
 NYI = not yet implemented.
+
+
+Sitebot:
+--------
+
+pzs-ng's ngBot.conf:
+
+set redirect(PRE-MP3INFO)  $mainchan
+set disable(PRE-MP3INFO)   0
+set chanlist(PRE-MP3INFO)  $mainchan
+set variables(PRE-MP3INFO) "%releasename %artist %album %year %genre %genre_id %bitrate %sampling %mode %none %none %none %mpeglayer"
+lappend msgtypes(DEFAULT)   "PRE-MP3INFO"
+
+default theme:
+
+announce.PRE-MP3INFO            = "[%b{%c1{pre-mp3info}}] %artist - %album :: %b{%genre}(genre_id) from %year at %b{%sampling}Hz in %b{%mode} %b{%bitrate}kbps (%mpeglayer)"
+
