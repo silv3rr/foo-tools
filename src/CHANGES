@@ -61,6 +61,8 @@ Sep 28 2004: * Added WOY to the SECTION dir as a macro for Week of Year.
 
 Cheers, Tanesha Team <tanesha@tanesha.net>.
 
+--------------------
+
 //PCFiL
 Jul 27 2011: * Fixed dirlog damage on x64 OS for foo-pre
              * Fixed foo-spy (spy) with new glftpd headers. (remember to set key in who.cfg)
@@ -110,3 +112,8 @@ Mar 03 2022: + added mod_prebw
 
 Jun 28 2023: * changed date macros for 'dir' property to %MM %DD etc
              * changed prebw module to run bin without any output
+
+Feb 29 2024: + added flac module, thanks to an anonymous 'donor'
+Mar 02 2024: * cleaned up mod_flac a bit and added artist/album tags, vendor_string
+Mar 03 2024: * fixed module tester
+
