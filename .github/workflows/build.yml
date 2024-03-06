@@ -27,7 +27,7 @@ jobs:
         run: make webspy
       - name: make foopre modules
         working-directory: ./src/pre/modules
-        run: apt-get install -qy libncurses-dev libflac-dev && make && size *.so
+        run: sudo apt-get install -qy libncurses-dev libflac-dev && make && size *.so
       - name: make show
         working-directory: ./src
         run: make show
