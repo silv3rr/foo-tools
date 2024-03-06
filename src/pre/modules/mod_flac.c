@@ -20,12 +20,20 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 /*
- * Module to extract mp3info from a pred release
- * Author, Soren.
- * $Id: mod_idmp3.c,v 1.5 2003/06/23 14:32:18 sorend Exp $
+ * Module to extract flac info from a pred release
+ * Author, xxx, slv.
+ * $Id: mod_flac.c,v x.x 2024/03/02 00:00:00 xxx, slv Exp $
  */
 
 #include <string.h>
+#include <stdio.h>
+
+#ifdef DEBUG
+#include <stdlib.h>
+#include <time.h>
+#endif
+
+#include <sys/stat.h>
 #include <FLAC/metadata.h>
 #include <FLAC/format.h>
 
@@ -40,199 +48,228 @@
 hashtable_t *_mod_flac_cfg = 0;
 
 void set_config(hashtable_t *cfg) {
-        _mod_flac_cfg = cfg;
+	_mod_flac_cfg = cfg;
 }
 hashtable_t *get_config() {
-        return _mod_flac_cfg;
+	return _mod_flac_cfg;
 }
 
 // prototype for file handling function.
 int mod_flac_file_func(char *filepath, char *argv[]);
 
 module_list_t mod_flac_info = {
-        // module name
-        "flac id extractor",
+	// module name
+	"flac id extractor",
 
-        // moduel dir func
-        0,
+	// module dir func
+	0,
 
-        // module file func
-        mod_flac_file_func,
+	// module file func
+	mod_flac_file_func,
 
-        // module rel func
-        0,
+	// module rel func
+	0,
 
-        // struct module_list entry
-        0
+	// struct module_list entry
+	0
 };
 
 
-// module global, checks number of mp3s checked (only handle first).
+// module global, checks number of flac files checked (only handle first).
 int mod_flac_count = 0;
 
 // function to return module info of this module.
 module_list_t *module_loader() {
-        return &mod_flac_info;
+	return &mod_flac_info;
 }
 
 // replace function
 int mod_flac_replace(char *b, char *n, char *r) {
-        char *t, *save;
-        int i=0;
+	char *t, *save;
+	int i=0;
 
-        while (t=strstr(b, n)) {
-                save=(char*)malloc(strlen(t)-strlen(n)+1);
-                strcpy(save, t+strlen(n));
-                *t=0;
-                strcat(b, r);
-                strcat(b, save);
-                free(save);
-                i++;
-        }
+	while (t=strstr(b, n)) {
+		save=(char*)malloc(strlen(t)-strlen(n)+1);
+		strcpy(save, t+strlen(n));
+		*t=0;
+		strcat(b, r);
+		strcat(b, save);
+		free(save);
+		i++;
+	}
 }
 
+void gl_gllog_add(char *mod);
 
-// format output using mp3info.
-void mod_flac_format_output(char *format_string, FLAC__StreamMetadata *flac_info, char *year, char *genre, int kbps, char *relname) {
-        char tmp[255]="";
-        char mod[1000],*percent,*pos,*code;
-        char *format=format_string;
-        int modlen;
+// format output
+void mod_flac_format_output(char *format_string, flac_info_t *flac_info, char *relname) {
+	char mod[1000];
+	char *format=format_string;
 
-        strcpy(mod, format_string);
+#ifdef DEBUG
+	time_t now;
+	struct tm *tm_now;
+	now = time(0);
+	tm_now = localtime(&now);
+	printf("MODULE-DEBUG: flac_info->artist=%s flac_info->genre=%s\n", flac_info->artist, flac_info->genre);
+	printf("MODULE-DEBUG: flac_info->samplingrate=%s\n", flac_info->samplingrate);
+	FILE *f;
+	f = fopen("mod_flac.log", "a");
+	char fdate[12], ftime[10];
+	strftime(fdate, 1024, "%Y-%m-%d", tm_now);
+	strftime(ftime, 1024, "%H:%M:%S", tm_now);
+	fprintf(f, "%s %s MODULE-DEBUG: flac_info->artist=%s flac_info->genre=%s\n", fdate, ftime, flac_info->artist, flac_info->genre);
+	fprintf(f, "%s %s MODULE-DEBUG: flac_info->samplingrate=%s\n", fdate, ftime, flac_info->samplingrate);
+	//fprintf(f, "%s %s MODULE-DEBUG: format_string=%s\n", fdate, ftime, format_string);
+	fclose(f);
+#endif
 
-//      mod_flac_replace(mod, "%a", mp3->id3.artist);
-//      mod_flac_replace(mod, "%l", mp3->id3.album);
-        mod_flac_replace(mod, "%y", year);
-        mod_flac_replace(mod, "%g", genre);
+	strcpy(mod, format_string);
 
-        sprintf(tmp, "%u", flac_info->data.stream_info.sample_rate);
-        mod_flac_replace(mod, "%Q", tmp);
+	mod_flac_replace(mod, "%a", flac_info->artist);
+	mod_flac_replace(mod, "%l", flac_info->album);
+	mod_flac_replace(mod, "%y", flac_info->year);
+	mod_flac_replace(mod, "%g", flac_info->genre);
+	mod_flac_replace(mod, "%Q", flac_info->samplingrate);
+	mod_flac_replace(mod, "%o", flac_info->channelmode);
+	mod_flac_replace(mod, "%r", flac_info->bitrate);
+	mod_flac_replace(mod, "%R", relname);
+	mod_flac_replace(mod, "%v", flac_info->vendor_string);
 
-//      mod_flac_replace(mod, "%L", mod_idmp3_layer_text[header_layer(&mp3->header)-1]);
-
-        sprintf(tmp, "%u", flac_info->data.stream_info.channels);
-        mod_flac_replace(mod, "%o", tmp);
-
-//      sprintf(tmp, "%u", flac_info->data.stream_info.bits_per_sample);
-        sprintf(tmp, "%d", kbps);
-        mod_flac_replace(mod, "%r", tmp);
-
-        mod_flac_replace(mod, "%R", relname);
-
-//      mod_flac_replace(mod, "%S", "NYI");
-//      mod_flac_replace(mod, "%m", "NYI");
-//      mod_flac_replace(mod, "%s", "NYI");
-
-        gl_gllog_add(mod);
-
-//      printf("  .. flac module says: Logged information to glftpd.log\n   .. %s\n", mod);
-
-        printf("%s\n", mod);
+	gl_gllog_add(mod);
+	//printf("  .. flac module says: Logged information to glftpd.log\n   .. %s\n", mod);
+	printf(" %s\n", mod);
 }
 
 
 // file func.
 int mod_flac_file_func(char *filepath, char *argv[]) {
 
-        char *tmp;
-//      FILE *fh;
-        char genre[255];
-        char year[255];
-        int seconds;
-        struct stat st;
+	flac_info_t flac_info;
+	char *tmp;
+	FILE *fh;
+	struct stat st;
 
-        if (mod_flac_count > 0) {
-                // printf("already got the flac, break\n");
-                return 0;
-        }
+	if (mod_flac_count > 0) {
+		//printf(" .. already got .flac, break\n");
+		return 0;
+	}
 
-        tmp = strrchr(filepath, '.');
+	tmp = strrchr(filepath, '.');
 
-        if (tmp)
-                tmp++;
-        else
-                tmp = filepath;
+	if (tmp)
+		tmp++;
+	else
+		tmp = filepath;
 
-        if (strcasecmp(tmp, "flac")) {
-                // printf(" .. %s -> not flac, continue\n", tmp);
-                return 1;
-        }
+	if (strcasecmp(tmp, "flac")) {
+		//printf(" .. %s -> not .flac, continue\n", tmp);
+		return 1;
+	}
 
-//      fh = fopen(filepath, "r");
+	fh = fopen(filepath, "rb");
 
-        // could not open file
-//      if (!fh)
-//              return 1;
+	// could not open file
+	if (!fh) {
+#ifdef DEBUG
+		printf(" .. could not open file (%s)\n", filepath);
+#endif
+		return 1;
+	}
 
-        FLAC__StreamMetadata *temp_meta = FLAC__metadata_object_new(FLAC__METADATA_TYPE_VORBIS_COMMENT);
+	fclose(fh);
 
-        if (FLAC__metadata_get_tags(filepath, &temp_meta)) {
-                FLAC__uint32 i;
+	// defaults
+	strcpy(flac_info.vendor_string, "Unknown");
+	strcpy(flac_info.artist, "Unknown");
+	strcpy(flac_info.album, "Unknown");
+	strcpy(flac_info.genre, "Unknown");
+	strcpy(flac_info.year, "0000");
+	strcpy(flac_info.bitrate, "0");
+	strcpy(flac_info.samplingrate, "0");
+	strcpy(flac_info.channelmode, "0");
 
-                for (i = 0; i < temp_meta->data.vorbis_comment.num_comments; i++) {
-                        char t_field[255];
-                        char t_args[255];
-                        char t[255];
-                        int idx = 0;
-                        FLAC__uint32 j;
+	FLAC__StreamMetadata *temp_meta = FLAC__metadata_object_new(FLAC__METADATA_TYPE_VORBIS_COMMENT);
 
+	if (FLAC__metadata_get_tags(filepath, &temp_meta)) {
+		FLAC__uint32 i, j, k;
+		k = 0;
+		if (temp_meta->data.vorbis_comment.vendor_string.length > 0) {
+			if (!strncmp((char *)temp_meta->data.vorbis_comment.vendor_string.entry, "reference libFLAC", 17))
+				k = 10;
+			for (i = 0; i < NAME_MAX - 1 && i < temp_meta->data.vorbis_comment.vendor_string.length; ++i)
+				flac_info.vendor_string[i] = temp_meta->data.vorbis_comment.vendor_string.entry[i+k];
+			flac_info.vendor_string[i] = '\0';
+		}
+		for (i = 0; i < temp_meta->data.vorbis_comment.num_comments; i++) {
+			char t_field[255];
+			char t_args[255];
+			char t[255];
+			int idx = 0;
+			for (j = 0; j < temp_meta->data.vorbis_comment.comments[i].length; j++) {
+				if (temp_meta->data.vorbis_comment.comments[i].entry[j] == '=') {
+					t[idx] = '\0';
+					strcpy(t_field, t);
+					idx = 0;
+					continue;
+				}
+				t[idx++] = temp_meta->data.vorbis_comment.comments[i].entry[j];
+			}
 
-                        for (j = 0; j < temp_meta->data.vorbis_comment.comments[i].length; j++) {
-                                if (temp_meta->data.vorbis_comment.comments[i].entry[j] == '=') {
-                                        t[idx] = '\0';
-                                        strcpy(t_field, t);
-                                        idx = 0;
-                                        continue;
-                                }
-                                t[idx++] = temp_meta->data.vorbis_comment.comments[i].entry[j];
-                        }
-                        t[idx] = '\0';
-                        strcpy(t_args, t);
+			t[idx] = '\0';
+			strcpy(t_args, t);
 
-//                      for (j = 0; j < strlen(t_field); j++) {
-//                              t_field[j] = toupper(t_field[j]);
-//                      }
+			if (strcasecmp("ARTIST", t_field) == 0) {
+				if (t_field != NULL)
+					strcpy(flac_info.artist, t_args);
+			} else if (strcasecmp("ALBUM", t_field) == 0) {
+				if (t_field != NULL)
+					strcpy(flac_info.album, t_args);
+			} else if (strcasecmp("DATE", t_field) == 0) {
+				if (t_field != NULL)
+					strcpy(flac_info.year, t_args);
+			} else if (strcasecmp("GENRE", t_field) == 0) {
+				if (t_field != NULL)
+					strcpy(flac_info.genre, t_args);
+			}
 
-                        if (strcasecmp("DATE", t_field) == 0) {
-                                if (t_field != NULL) {
-                                        strcpy(year, t_args);
-                                } else {
-                                        strcpy(year, "EUnknown");
-                                }
-                        } else if (strcasecmp("GENRE", t_field) == 0) {
-                                if (t_field != NULL) {
-                                        strcpy(genre, t_args);
-                                } else {
-                                        strcpy(genre, "EUnknown");
-                                }
-                        }
+			t_field[0] = '\0';
+			t_args[0] = '\0';
+		}
+	} else {
+		return 1;
+	}
 
-                        t_field[0] = '\0';
-                        t_args[0] = '\0';
-                }
-        }
-        FLAC__metadata_object_delete(temp_meta);
+	if(temp_meta != NULL)
+		FLAC__metadata_object_delete(temp_meta);
 
-        temp_meta = FLAC__metadata_object_new(FLAC__METADATA_TYPE_STREAMINFO);
-        if (false == FLAC__metadata_get_streaminfo(filepath, temp_meta)) {
-                return 1;
-        }
-        FLAC__metadata_object_delete(temp_meta);
+	temp_meta = FLAC__metadata_object_new(FLAC__METADATA_TYPE_STREAMINFO);
 
-        seconds = (temp_meta->data.stream_info.total_samples / temp_meta->data.stream_info.sample_rate);
-        stat(filepath, &st);
+	if (FLAC__metadata_get_streaminfo(filepath, temp_meta)) {
+		stat(filepath, &st);
+		sprintf(flac_info.bitrate, "%d", (st.st_size * temp_meta->data.stream_info.sample_rate) / (125 * temp_meta->data.stream_info.total_samples));
+		sprintf(flac_info.samplingrate, "%u", temp_meta->data.stream_info.sample_rate);
+		sprintf(flac_info.channelmode, "%u", temp_meta->data.stream_info.channels);
+		//temp_meta->data.stream_info.bits_per_sample
+	} else {
+		return 1;
+	}
 
-        mod_flac_count++;
+	if(temp_meta != NULL)
+		FLAC__metadata_object_delete(temp_meta);
 
-        tmp = ht_get(get_config(), PROPERTY_MOD_FLAC_OUTPUT);
+	mod_flac_count++;
 
-        if (!tmp)
-                tmp = strdup(DEFAULT_OUTPUT);
-        else
-                tmp = strdup(tmp);
+	tmp = ht_get(get_config(), PROPERTY_MOD_FLAC_OUTPUT);
 
-        mod_flac_format_output(tmp, temp_meta, year, genre, (((st.st_size/seconds) * 8) / 1000), argv[1]);
+	if (!tmp)
+		tmp = strdup(DEFAULT_OUTPUT);
+	else
+		tmp = strdup(tmp);
 
-        return 1;
+	mod_flac_format_output(tmp, &flac_info, argv[1]);
+
+	return 1;
 }
+
+/* vim: set noai tabstop=8 shiftwidth=8 softtabstop=8 noexpandtab: */
