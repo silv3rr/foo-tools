@@ -9,24 +9,49 @@ on:
 
 jobs:
   build:
+    name: Compile foo-tools
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-    - name: configure
-      working-directory: ./src
-      run: ./configure
-    - name: make build (all)
-      working-directory: ./src
-      run: make build
-    - name: make foobnc
-      working-directory: ./src/bouncer
-      run: make
-    - name: make webspy
-      working-directory: ./src/who
-      run: make webspy
-    - name: make foopre modules
-      working-directory: ./src/pre/modules
-      run: make && size *.so
-    - name: make show
-      working-directory: ./src
-      run: make show
+      - uses: actions/checkout@v3
+      - name: configure
+        working-directory: ./src
+        run: ./configure
+      - name: make build (all)
+        working-directory: ./src
+        run: make build
+      - name: make foobnc
+        working-directory: ./src/bouncer
+        run: make
+      - name: make webspy
+        working-directory: ./src/who
+        run: make webspy
+      - name: make foopre modules
+        working-directory: ./src/pre/modules
+        run: make && size *.so
+      - name: make show
+        working-directory: ./src
+        run: make show
+
+  release:
+    name: Create Release
+    runs-on: ubuntu-latest
+    if: ${{ github.event_name == 'workflow_dispatch' }} 
+    needs: build
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: foo-tools
+          body: |
+            Includes foo-pre, mp3genre and modules
+
+            See [CHANGES](src/CHANGES)
+
+          draft: false
+          prerelease: false
