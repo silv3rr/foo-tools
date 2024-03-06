@@ -10,10 +10,10 @@ This software comes without any claims regarding security or support about how t
 This is a modified and updated version of foo-tools by Tanesha Team:
 
 - modification to foo-pre; shows mp3 genre in PRE line (no module needed)
+- added modules: mod_audiosort, mod_prebw, mod_flac
 - added date/time in foo-pre.log
-- added mod_audiosort, mod_prebw
 - updated Makefiles, fixed compiler warnings
-- updates/fixes from upstream [glftpd/foo-tools](https://github.com/glftpd/foo-tools)
+- includes updates/fixes from upstream [glftpd/foo-tools](https://github.com/glftpd/foo-tools)
 
 For more details see [CHANGELOG](src/CHANGES).
 
@@ -34,19 +34,24 @@ The original foo-tools version by Tanesha is available from this branch: [foo-or
 
 It does include fixes, but not the mp3genre modification.
 
+There's also [foo-2007](https://github.com/silv3rr/foo-tools/tree/foo-2007) which is 3.1 version by Hujer.
+
 ## Documentation
 
 ### Installation
+
+Quick start:
 
 1) First get this repo with `git clone`
 2) Build all tools: `cd src && ./configure && make build`
 3) See README for specific tool in [doc](doc) dir
 
-### Detailed instructions ###
+### Detailed instructions
 
 - [README.1st](README.1st) Original README file
-- [src/README.1st](src/README.1st) Building instructions
+- [src/README.1st](src/README.1st) Building
 - [doc/HOWTO](doc/HOWTO) Notes about compiling
+- [doc/README.foo-pre](doc/README.foo-pre) foo-pre
 - [doc](doc) Documentation on installing/running the programs
 
 ### Modules
@@ -54,6 +59,7 @@ It does include fixes, but not the mp3genre modification.
 Addons for foo-pre; modules add functions but are not build into foo-pre binary
 
 - [src/pre/README.modules](src/pre/README.modules)
+- [src/pre/modules/README.mod_flac](src/pre/modules/README.mod_flac)
 - [src/pre/modules/README.mod_prebw](src/pre/modules/README.mod_prebw)
 - [src/pre/modules/README.mod_audiosort](src/pre/modules/README.mod_audiosort)
 - [src/pre/modules/README.mod_chmod](src/pre/modules/README.mod_chmod)
