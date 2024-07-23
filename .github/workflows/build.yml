@@ -32,26 +32,22 @@ jobs:
         working-directory: ./src
         run: make show
 
-  release:
-    name: Create Release
+  create-release:
+    name: Get artifacts, create release
     runs-on: ubuntu-latest
-    if: ${{ github.event_name == 'workflow_dispatch' }} 
     needs: build
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ github.ref }}
-          release_name: foo-tools
-          body: |
-            Includes foo-pre, mp3genre and modules
+        uses: actions/checkout@v3
+      - run: cd src && make distclean
+      - name: Create release using 'gh'
+        run: |
+          gh release create foo-tools-v$(date +%Y%m%d) $(find -type f -printf '%p ') --notes-file - <<'#####'
+            Includes foo-pre and modules
 
             See [CHANGES](src/CHANGES)
+          #####
+        working-directory: /
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-          draft: false
-          prerelease: false
