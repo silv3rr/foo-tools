@@ -33,13 +33,12 @@ jobs:
         run: make show
 
   create-release:
-    name: Get artifacts, create release
+    name: Create release
     runs-on: ubuntu-latest
     needs: build
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-      - run: cd src && make distclean
       - name: Create release using 'gh'
         run: |
           gh release create foo-tools-v$(date +%Y%m%d) $(find -type f -printf '%p ') --notes-file - <<'#####'
