@@ -129,7 +129,7 @@ int mod_sitenfoadd_expand(char *buf) {
 void mod_sitenfoadd_add_nfo(char *path, char *rel) {
 
 	struct macro_list *ml = 0;
-	char *tmp, buf[1024], *fn, fbuf[1024];
+	char *tmp, buf[1024], *fn, fbuf[2048];
 	FILE *f;
 	time_t now;
 

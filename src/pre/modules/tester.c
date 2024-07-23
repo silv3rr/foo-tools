@@ -29,14 +29,20 @@
 #include <lib/gllogs.h>
 
 // test a module.
-int test_module(char *module, char *file, char *path) {
+int test_module(hashtable_t cfg, char *module, char *mode, char *file, char *path) {
 
 	void *handle;
 	module_list_t *module_func;
 	module_list_t* (*module_loader)();
-	char *args[] = {"", "Whatever-REL", "mp3"};
+
+	//char *args[] = {"", "Whatever-REL", "mp3"};
+	char *args[] = {"", "Whatever-REL", "flac"};
 
 	handle = dlopen(module, RTLD_LAZY);
+
+	int rc;
+
+	void (*set_config)(hashtable_t *ht);
 
 	if (!handle) {
 		printf("Error loading module '%s':\n%s\n", module, dlerror());
@@ -44,6 +50,7 @@ int test_module(char *module, char *file, char *path) {
 	}
 
 	module_loader = dlsym(handle, MODULE_LOADER_FUNC);
+	set_config = dlsym(handle, MODULE_SETCONFIG_FUNC);
 
 	if (!module_loader) {
 		printf("Error loading module %s: No loader func\n");
@@ -51,24 +58,37 @@ int test_module(char *module, char *file, char *path) {
 		return 0;
 	}
 
-	printf("DEBUG: file=%s path=%s\n", file, path);
+	if (!mode)
+		strcpy(mode, "1");
+
+	set_config(&cfg);
 
 	// show module name
-	printf("module name = %s %s\n", module_loader()->mod_name, module);
+	printf("INFO: [tester] mod_name is \"%s\"\n", module_loader()->mod_name);
 
-/* FIXME
-	// test module file func
-	if (module_func->mod_func_file != 0)
-		module_loader()->mod_func_file(file, args);
+	switch(mode[0]) {
+		case '1':
+		// test module file func
+		if (module_func->mod_func_file != 0)
+			module_loader()->mod_func_file(file, args);
+		break;
 
-	// test module dir func
-	if (module_func->mod_func_dir != 0)
-		module_loader()->mod_func_dir(path, args);
+		case '2':
+		// test module dir func
+		if (module_func->mod_func_dir != 0)
+			module_loader()->mod_func_dir(path, args);
+		break;
 
-	// test module rel func
-	if (module_func->mod_func_rel != 0)
-		module_loader()->mod_func_rel(path, args);
-*/
+		case '3':
+		// test module rel func
+		if (module_func->mod_func_rel != 0)
+			module_loader()->mod_func_rel(path, args);
+		break;
+
+		default:
+			printf("ERROR: specify func num, exiting...\n");
+			exit(1);
+	}
 
 	dlclose(handle);
 
@@ -80,17 +100,41 @@ hashtable_t *get_config() {
 	return cfg;
 }
 
-/* FIXME
-int do_module(char *path, char *file) {
-
-	//void *handle;
+int do_module(hashtable_t cfg, char *module, char *mode, char *file, char *path) {
+	void *handle;
 	module_list_t *module_func;
-	//module_list_t* (*module_loader)();
-	char *args[] = {"", "Whatever-REL", "mp3"};
+	module_list_t* (*module_loader)();
+	//char *args[] = {"", "Whatever-REL", "mp3"};
+	char *args[] = {"", "Whatever-REL", "flac"};
+
+	void (*set_config)(hashtable_t *ht);
+
+	//char *module;
+
+	char *err;
+
+	//module = "mod_flac.so";
+
+	handle = dlopen(module, RTLD_LAZY);
+	handle = dlopen(module, RTLD_LAZY);
+	if (!handle) {
+		err = dlerror();
+		printf("ERROR: loading module %s: %s\n", module, err);
+		return 0;
+	}
+
+	module_loader = dlsym(handle, MODULE_LOADER_FUNC);
+	set_config = dlsym(handle, MODULE_SETCONFIG_FUNC);
+
+	if (!module_loader || !set_config) {
+		printf("ERROR: loading module %s: No loader func found\n");
+		dlclose(handle);
+		return 0;
+	}
+
+	set_config(&cfg);
 
 	module_func = module_loader();
-
-        //module_loader = dlsym(handle, MODULE_LOADER_FUNC);
 
 	if (module_func->mod_func_file != 0)
 		module_func->mod_func_file(file, args);
@@ -100,8 +144,9 @@ int do_module(char *path, char *file) {
 
 	if (module_func->mod_func_rel != 0)
 		module_func->mod_func_rel(path, args);
+
+	dlclose(handle);
 }
-*/
 
 int main(int argc, char *argv[]) {
 
@@ -117,10 +162,13 @@ int main(int argc, char *argv[]) {
 	get_config();
 	//gl_gllog_add("");
 
-	test_module(argv[2], argv[3], argv[4]);
+	//mode 1:file 2:dir 3:rel
+	if (argv[3][0] == '1' || argv[3][0] == '2' || argv[3][0] == '3')
+		test_module(*cfg, argv[2], argv[3], argv[4], argv[5]);
 
-	//FIXME
-	//do_module(argv[2], argv[3]);
+	// mode 4
+	if (argv[3][0] == '4')
+		do_module(*cfg, argv[2], argv[3], argv[4], argv[5]);
 
 }
 /* vim: set noai tabstop=8 shiftwidth=8 softtabstop=8 noexpandtab: */

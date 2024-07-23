@@ -1,0 +1,62 @@
+FLACINFO
+
+Building:
+---------
+mod_flac depends on the libflac package (libflac-dev)
+
+Run 'make' in this dir to build mod_flac.so
+Copy it to /glftpd/bin/premodules and make sure libflac.so is in glftpd's lib dir
+
+Add it to the modules list in pre.cfg like this:
+
+modules=/bin/premodules/mod_flac.so
+
+If you have more modules already loaded, it will look like this
+
+modules=/bin/premodules/mod_other.so|/bin/premodules/mod_whatever.so|/bin/premodules/mod_flac.so
+
+
+Output:
+-------
+
+output from mod_flac can be configured using the setting:
+
+mod_flac.output=output string
+
+in pre.cfg, default output string is:
+
+PRE-FLACINFO: "%R" "%a" "%l" "%y" "%g" "" "%r" "%Q" "%o" "" "" "" "" "%v"
+
+The variables are similar to mp3:
+
+%R - release name, eg. Me_and_Myself-My_Leet_Tracks-FLAC-2013-Whatever
+%a - artist
+%l - album name
+%y - year
+%g - genre (string)
+%G - UNUSED
+%r - bitrate in Kbit/s
+%Q - sampling frequency in Hz
+%o - channelmode
+%m - UNUSED
+%s - UNUSED
+%S - UNUSED
+%L - UNUSED
+%v - vendor version string
+
+
+Sitebot:
+--------
+
+pzs-ng's ngBot.conf:
+
+set redirect(PRE-FLACINFO)  $mainchan
+set disable(PRE-FLACINFO)   0
+set chanlist(PRE-FLACINFO)  $mainchan
+set variables(PRE-FLACINFO) "%releasename %artist %album %year %genre %none %bitrate %sampling %mode %none %none %none %none %version"
+lappend msgtypes(DEFAULT)   "PRE-FLACINFO"
+
+add to theme:
+
+announce.PRE-FLACINFO           = "[%b{%c1{pre-flacinfo}}] %artist - %album :: %b{%genre} from %year at %b{%sampling}Hz in %b{%mode} channels %b{%bitrate}kbps (%version)"
+

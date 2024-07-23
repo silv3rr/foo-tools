@@ -23,6 +23,7 @@ entry
 datanode
 *.pid
 nfocleaner
+foobnc
 foo-nukes
 foo-pre
 mp3info
@@ -45,6 +46,9 @@ config.log
 autom4te.cache/
 *.swp
 
+.vscode/
+test/
+tmp/
 *.bak
 *.log
 *.debug
