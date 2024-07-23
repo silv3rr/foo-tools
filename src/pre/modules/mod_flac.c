@@ -247,7 +247,7 @@ int mod_flac_file_func(char *filepath, char *argv[]) {
 
 	if (FLAC__metadata_get_streaminfo(filepath, temp_meta)) {
 		stat(filepath, &st);
-		sprintf(flac_info.bitrate, "%d", (st.st_size * temp_meta->data.stream_info.sample_rate) / (125 * temp_meta->data.stream_info.total_samples));
+		sprintf(flac_info.bitrate, "%ld", (st.st_size * temp_meta->data.stream_info.sample_rate) / (125 * temp_meta->data.stream_info.total_samples));
 		sprintf(flac_info.samplingrate, "%u", temp_meta->data.stream_info.sample_rate);
 		sprintf(flac_info.channelmode, "%u", temp_meta->data.stream_info.channels);
 		//temp_meta->data.stream_info.bits_per_sample
